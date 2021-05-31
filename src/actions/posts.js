@@ -17,7 +17,7 @@ export function fetchPosts() {
 export function updatePosts(posts) {
     return {
         type: UPDATE_POSTS,
-        posts
-    } 
+        posts,
+    };
      
 }

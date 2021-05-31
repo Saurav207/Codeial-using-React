@@ -1,8 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 import propsTypes from 'prop-types';
+
 import { fetchPosts } from '../actions/posts';
-import {PostsLists} from './';
+import {PostsLists, NavBar} from './index';
+
+//create some dummy components
+const Login = () => 
+  <div>Login</div>;
+
+
+
+const SignUp = () => 
+  <div>SignUp</div>;
+
+
+const Home = () => 
+  <div>Home</div>;
+
+
 
 class App extends React.Component {
   componentDidMount() {
@@ -12,48 +29,30 @@ class App extends React.Component {
   render() {
     const { posts } = this.props;
     return (
-      <div>
-        <nav className = "nav">
-          <div className = "left-div">
-            
-              LOGO
-          </div>
-          <div className = "search-container">
-            <img className="search-icon" src="https://image.flaticon.com/icons/png/512/64/64673.png" alt = "icon" />
-            <input placeholder="Search" />
-            <div className="search-results">
-              <ul>
-                <li className="search-results-row">
-                  <img src="https://image.flaticon.com/icons/png/512/3135/3135715.png" alt="user-DP" />
-                  <span>Sanju</span>
-                </li>
-                <li className="search-results-row">
-                  <img src="https://image.flaticon.com/icons/png/512/3135/3135715.png" alt="user-DP" />
-                  <span>Sanju</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className = "right-nav">
-            <div className="user">
-            <img src="https://image.flaticon.com/icons/png/512/3135/3135715.png" alt="user-DP" id="user-dp"/>
-                  <span>Sanju</span>
-              
-            </div>
-            <div className="nav-links">
-              <ul>
-                <li>Log in</li>
-                <li>Log Out</li>
-                <li>Register</li>
-                
-              </ul>
-            </div>
-          </div>
+      <Router>
+         <div>
+          <NavBar />
+          {/* <PostsLists posts = {posts}/> */}
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
 
+            <li>
+              <Link to="/login">LogIn</Link>
+            </li>
 
-        </nav>
-       <PostsLists posts = {posts}/>
-      </div>
+            <li>
+              <Link to="/signup">SignUp</Link>
+            </li>
+
+          </ul>
+
+          <Route exact  path="/" component={Home}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/signUp" component={SignUp}/>
+        </div>
+      </Router>
     );
   }
 }
