@@ -57,11 +57,11 @@ class PostsLists extends Component {
           </div>
         ))}
       </div>
-    )
+    );
   }
 }
 PostsLists.propTypes = {
   posts: propTypes.array.isRequired,
-}
+};
 
 export default PostsLists;

@@ -6,7 +6,8 @@ export function fetchPosts() {
           .then((response) => {
               console.log('response', response);
               return response.json();
-          }).then((data) => {
+          })
+          .then((data) => {
               console.log(data);
               dispatch(updatePosts(data.data.posts));
           })

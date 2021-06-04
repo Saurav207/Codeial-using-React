@@ -1,25 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import propsTypes from 'prop-types';
 
 import { fetchPosts } from '../actions/posts';
-import {PostsLists, NavBar} from './index';
+import { NavBar, Home, Page404, Login, Signup} from './';
 
 //create some dummy components
-const Login = () => 
-  <div>Login</div>;
 
+const SignUp = () => <div>SignUp</div>;
 
-
-const SignUp = () => 
-  <div>SignUp</div>;
-
-
-const Home = () => 
-  <div>Home</div>;
-
-
+// const Home = (props) => {
+//   console.log(props);
+//   return <div>Home</div>;
+// };
 
 class App extends React.Component {
   componentDidMount() {
@@ -30,10 +24,10 @@ class App extends React.Component {
     const { posts } = this.props;
     return (
       <Router>
-         <div>
+        <div>
           <NavBar />
           {/* <PostsLists posts = {posts}/> */}
-          <ul>
+          {/* <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
@@ -45,12 +39,19 @@ class App extends React.Component {
             <li>
               <Link to="/signup">SignUp</Link>
             </li>
-
-          </ul>
-
-          <Route exact  path="/" component={Home}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/signUp" component={SignUp}/>
+          </ul> */}
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={(props) => {
+                return <Home {...props} posts={posts} />;
+              }}
+            />
+            <Route path="/login" component={Login} />
+            <Route path="/signUp" component={Signup} />
+            <Route component={Page404} />
+          </Switch>
         </div>
       </Router>
     );
@@ -58,11 +59,11 @@ class App extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    posts: state.posts
+    posts: state.posts,
   };
 }
-App.propsTypes = {
+App.propTypes = {
   posts: propsTypes.array.isRequired,
-}
+};
 
 export default connect(mapStateToProps)(App);
