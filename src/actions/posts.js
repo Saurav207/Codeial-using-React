@@ -6,7 +6,7 @@ export function fetchPosts() {
         const url = APIUrls.fetchPosts();
         fetch(url)
           .then((response) => {
-              console.log('response', response);
+              //console.log('response', response);
               return response.json();
           })
           .then((data) => {

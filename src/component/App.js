@@ -4,11 +4,13 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import propsTypes from 'prop-types';
 
 import { fetchPosts } from '../actions/posts';
-import { NavBar, Home, Page404, Login, Signup} from './';
+import { NavBar, Home, Page404, Login, Signup } from './';
+import * as jwtDecode from 'jwt-decode';
+import { authenticateUser } from '../actions/auth';
 
 //create some dummy components
 
-const SignUp = () => <div>SignUp</div>;
+// const signup = () => <div>SignUp</div>;
 
 // const Home = (props) => {
 //   console.log(props);
@@ -18,6 +20,21 @@ const SignUp = () => <div>SignUp</div>;
 class App extends React.Component {
   componentDidMount() {
     this.props.dispatch(fetchPosts());
+
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      const user = jwtDecode(token);
+
+      console.log('user', user);
+      this.props.dispatch(
+        authenticateUser({
+          email: user.email,
+          _id: user._id,
+          name: user.name,
+        })
+      );
+    }
   }
 
   render() {
@@ -49,7 +66,7 @@ class App extends React.Component {
               }}
             />
             <Route path="/login" component={Login} />
-            <Route path="/signUp" component={Signup} />
+            <Route path="/signup" component={Signup} />
             <Route component={Page404} />
           </Switch>
         </div>
