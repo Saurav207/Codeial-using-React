@@ -7,6 +7,7 @@ import {
   SIGNUP_START,
   SIGNUP_SUCCESS,
   SIGNUP_FAILED,
+  CLEAR_AUTH_STATE,
 } from './actionTypes';
 import { APIUrls } from '../helpers/url';
 import { getFormBody } from '../helpers/utils';
@@ -50,6 +51,7 @@ export function login(email, password) {
         console.log('data', data);
         if (data.success) {
           //dispatch action to save user
+          localStorage.setItem('token', data.data.token);
           dispatch(loginsuccess(data.data.user));
           return;
         }
@@ -116,9 +118,15 @@ export function signupsuccess(user) {
   };
 }
 
-export function signupfailed(errorMessage) {
+export function signupfailed(error) {
   return {
     type: SIGNUP_FAILED,
-    error: errorMessage,
+    error,
+  };
+}
+
+export function clearAuthState() {
+  return {
+    type: CLEAR_AUTH_STATE,
   };
 }
