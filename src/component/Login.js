@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login, clearAuthState } from '../actions/auth';
 
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -45,10 +44,14 @@ class Login extends Component {
 
   render() {
     const { error, inProgress, isLoggedin } = this.props.auth;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+
     
-    if(isLoggedin) {
-      return <Redirect to="/" />;
+    if (isLoggedin) {
+      return <Redirect to={from} />;
     }
+
+    
     return (
       <form className="login-form">
         <span className="login-signup-header">Log In</span>
