@@ -18,9 +18,9 @@ class PostsLists extends Component {
                   />
                 </Link>
                 <div>
-                  <Link to="/user">
+                  
                     <span className="post-author">{post.user.name}</span>
-                  </Link>
+                  
                   <span className="post-time">a minute ago</span>
                 </div>
               </div>

@@ -27,12 +27,14 @@ import { fetchUserFriends } from '../actions/friends';
 //const User = () => <div>User Details</div>;
 
 const PrivateRoute = (privateRouteProps) => {
-  const { isloggedin, path, component: Component } = privateRouteProps;
+  const { isLoggedin, path, component: Component } = privateRouteProps;
   return (
     <Route
       path={path}
       render={(props) => {
-        return isloggedin ? (
+        console.log('props', props);
+        console.log('isLoggedin', isLoggedin);
+        return isLoggedin ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -72,6 +74,7 @@ class App extends React.Component {
 
   render() {
     const { posts, auth, friends } = this.props;
+    console.log('oops', this.props);
     return (
       <Router>
         <div>
@@ -95,16 +98,17 @@ class App extends React.Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <PrivateRoute
-              path={'/user/:userId'}
+              path="/settings"
+              component={Settings}
+              isLoggedin={auth.isLoggedin}
+            />
+            <PrivateRoute
+              path="/user/:userId"
               component={UserProfile}
-              isloggedin={auth.isLoggedin}
+              isLoggedin={auth.isLoggedin}
             />
 
-            <PrivateRoute
-              path={'/settings'}
-              component={Settings}
-              isloggedin={auth.isLoggedin}
-            />
+           
             <Route component={Page404} />
           </Switch>
         </div>
@@ -113,9 +117,11 @@ class App extends React.Component {
   }
 }
 function mapStateToProps(state) {
+  //console.log('state', state);
   return {
     posts: state.posts,
     auth: state.auth,
+    friends: state.friends,
   };
 }
 App.propTypes = {

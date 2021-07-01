@@ -1,5 +1,5 @@
 import {
-  UPDATE_POSTS,
+  
   USER_PROFILE_SUCCESS,
   USER_PROFILE_FAILED,
   FETCH_USER_PROFILE,
@@ -10,7 +10,7 @@ const initialProfileState = {
   success: null,
   inProgress: false,
 };
-export default function posts(state = initialProfileState, action) {
+export default function profile(state = initialProfileState, action) {
   switch (action.type) {
     case USER_PROFILE_SUCCESS:
       return {
