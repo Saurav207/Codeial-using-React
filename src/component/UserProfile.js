@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { fetchUserProfile } from '../actions/profile';
 import { APIUrls } from '../helpers/url';
 import { getAuthTokenLocalStorage } from '../helpers/utils';
-import {addFriend} from '../actions/friends'
-
+import { addFriend } from '../actions/friends';
+import { removeFriend } from '../actions/friends';
 
 class UserProfile extends Component {
   constructor(props) {
@@ -12,6 +12,7 @@ class UserProfile extends Component {
     this.state = {
       success: null,
       error: null,
+      successMessage: null,
     };
   }
   componentDidMount() {
@@ -36,10 +37,9 @@ class UserProfile extends Component {
     return false;
   };
 
-
   handleAddFriend = async () => {
     const userId = this.props.match.params.userId;
-   const url = APIUrls.addFriend(userId);
+    const url = APIUrls.addFriend(userId);
     const options = {
       method: 'POST',
       headers: {
@@ -49,23 +49,53 @@ class UserProfile extends Component {
     };
     const response = await fetch(url, options);
     //now this response is convert to json
-    const data = await response.json();//this response.json gives me another promise
+    const data = await response.json(); //this response.json gives me another promise
 
-    if(data.success) {
-       this.setState({ 
-         success: true
-       });
+    if (data.success) {
+      this.setState({
+        success: true,
+        successMessage: 'ADDED FRIEND SUCCESSFULLY',
+      });
 
-       //to store the user which is get from this  data so dispatch the action 
-       this.props.dispatch(addFriend(data.data.friendship));
-    }
-    else {
-      this.setState({ 
-        success: null, 
+      //to store the user which is get from this  data so dispatch the action
+      this.props.dispatch(addFriend(data.data.friendship));
+    } else {
+      this.setState({
+        success: null,
         error: data.messages,
       });
     }
-  }
+  };
+
+  handleRemoveFriend = async () => {
+    const { match } = this.props;
+    const url = APIUrls.removeFriend(match.params.userId);
+    const extra = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${getAuthTokenLocalStorage()}`,
+      },
+    };
+
+    const response = await fetch(url, extra);
+    const data = await response.json();
+    console.log('await data', data);
+
+    if (data.success) {
+      //show user message
+      this.setState({
+        success: true,
+        successMessage: 'REMOVE FRIEND SUCCESSFULLY',
+      });
+      this.props.dispatch(removeFriend(match.params.userId));
+    } else {
+      this.setState({
+        success: null,
+        error: data.message,
+      });
+    }
+  };
 
   render() {
     // const { user } = this.props.auth;
@@ -79,7 +109,7 @@ class UserProfile extends Component {
       return <h1>Loading!</h1>;
     }
     const isUserAFriend = this.checkIfUserIsAFriend();
-    const { success, error } = this.state;
+    const { success, error, successMessage } = this.state;
     return (
       <div className="settings">
         <div className="img-container">
@@ -107,13 +137,20 @@ class UserProfile extends Component {
         <div className="btn-grp">
           {/* <button className="button save-btn">Add Friend</button> */}
           {!isUserAFriend ? (
-            <button className="button save-btn" onClick={this.handleAddFriend}>Add Friend</button>
+            <button className="button save-btn" onClick={this.handleAddFriend}>
+              Add Friend
+            </button>
           ) : (
-            <button className="button save-btn">Remove Friend</button>
+            <button
+              className="button save-btn"
+              onClick={this.handleRemoveFriend}
+            >
+              Remove Friend
+            </button>
           )}
           {success && (
             <div className="alert success-dailog">
-              Friend added successfully
+             {successMessage}
             </div>
           )}
           {error && <div className="alert error-dailog">{error}</div>}
